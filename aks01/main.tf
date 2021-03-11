@@ -9,10 +9,24 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = azurerm_resource_group.main.name
   dns_prefix          = var.cluster_name
 
-  default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size    = "Standard_D2_V2"
+  dynamic "default_node_pool" {
+    for_each = ["default_node_pool_auto_scaled"]
+    content {
+      orchestrator_version  = var.k8s_version
+      name                  = var.node_pool_name
+      vm_size               = var.node_size
+      os_disk_size_gb       = var.os_disk_size_gb
+      vnet_subnet_id        = var.vnet_subnet_id
+      enable_auto_scaling   = var.enable_auto_scaling
+      max_count             = var.max_count
+      min_count             = var.min_count
+      enable_node_public_ip = var.enable_node_public_ip
+      availability_zones    = var.nodes_availability_zones
+      node_labels           = var.node_labels
+      type                  = var.node_type
+      max_pods              = var.max_pods
+      tags                  = merge(var.tags, var.node_tags)
+    }
   }
 
   identity {
