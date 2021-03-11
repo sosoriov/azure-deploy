@@ -31,7 +31,7 @@ variable "log_analytics_workspace_sku" {
 variable "log_retention_in_days" {
   type        = number
   description = "Retention log"
-  default     = 30
+  default     = 7
 }
 
 variable "tags" {
