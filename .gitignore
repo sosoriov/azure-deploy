@@ -30,3 +30,5 @@ override.tf.json
 # example: *tfplan*
 
 *.tfvars
+identity*
+known_hosts
