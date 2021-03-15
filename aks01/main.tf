@@ -41,6 +41,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      addon_profile,
+    ]
+  }
 }
 
 resource "azurerm_log_analytics_workspace" "main-workspace" {
@@ -70,4 +76,73 @@ resource "azurerm_log_analytics_solution" "main-solution" {
 
   tags = var.tags
 
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+
+}
+
+
+# FLUX
+
+provider "kubernetes" {
+  host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+  username               = azurerm_kubernetes_cluster.aks.kube_config.0.username
+  password               = azurerm_kubernetes_cluster.aks.kube_config.0.password
+  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+  client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+}
+
+provider "kubectl" {
+  host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+  token                  = azurerm_kubernetes_cluster.aks.kube_config.0.password
+  load_config_file       = false
+}
+
+
+
+# Generate manifests
+data "flux_install" "main" {
+  target_path    = "clusters/seboso01"
+  network_policy = false
+}
+
+resource "kubernetes_namespace" "flux_system" {
+  metadata {
+    name = "flux-system"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata[0].labels,
+    ]
+  }
+}
+
+data "kubectl_file_documents" "install" {
+  content = data.flux_install.main.content
+}
+
+# Split multi-doc YAML with
+# https://registry.terraform.io/providers/gavinbunney/kubectl/latest
+data "kubectl_file_documents" "apply" {
+  content = data.flux_install.main.content
+}
+
+locals {
+  install = [for v in data.kubectl_file_documents.install.documents : {
+    data : yamldecode(v)
+    content : v
+    }
+  ]
+}
+
+resource "kubectl_manifest" "install" {
+  for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  depends_on = [kubernetes_namespace.flux_system]
+  yaml_body = each.value
 }

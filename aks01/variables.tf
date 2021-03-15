@@ -115,7 +115,7 @@ variable "node_type" {
 variable "max_pods" {
   type        = number
   description = "The maximum number of pods that can run on each agent. Changing this forces a new resource to be created"
-  default = null
+  default     = null
 }
 
 variable "node_tags" {
