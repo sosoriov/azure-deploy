@@ -22,7 +22,7 @@ provider "registry.terraform.io/fluxcd/flux" {
 
 provider "registry.terraform.io/gavinbunney/kubectl" {
   version     = "1.10.0"
-  constraints = ">= 1.9.1"
+  constraints = ">= 1.10.0"
   hashes = [
     "h1:x5NHOW8DG0cBE1QmJ/Hl4ktMpeIfkEpoOvnf/kISdBU=",
     "zh:0786e6cb375e4e6a70220bb67fc3de80c8c30dcb00c0f4f0ec7bb10404a120db",
@@ -73,7 +73,8 @@ provider "registry.terraform.io/hashicorp/github" {
 }
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
-  version = "2.0.2"
+  version     = "2.0.2"
+  constraints = "2.0.2"
   hashes = [
     "h1:PRfDnUFBD4ud7SgsMAa5S2Gd60FeriD1PWE6EifjXB0=",
     "zh:4e66d509c828b0a2e599a567ad470bf85ebada62788aead87a8fb621301dec55",
