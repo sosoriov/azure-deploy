@@ -17,5 +17,9 @@ jobs:
       
       - name: Terraform plan
         uses: dflook/terraform-plan@v1
+        env:
+          TF_VAR_github_token: ${{ secrets.GITHUB_TOKEN }}
+          TF_VAR_tags: '{"environment" = "labo"}'
         with:
           path: ./
+          var: resource_group=rg-seboso01,cluster_name=seboso01-aks
