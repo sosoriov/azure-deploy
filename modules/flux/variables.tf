@@ -18,7 +18,7 @@ variable "repository_name" {
 
 variable "repository_visibility" {
   type    = string
-  default = "private"
+  default = "public"
 }
 
 variable "branch" {
