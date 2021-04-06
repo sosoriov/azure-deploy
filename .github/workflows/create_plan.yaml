@@ -18,4 +18,4 @@ jobs:
       - name: Terraform plan
         uses: dflook/terraform-plan@v1
         with:
-          path: / 
+          path: ./
