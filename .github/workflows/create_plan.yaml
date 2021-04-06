@@ -3,7 +3,7 @@ name: Create terraform plan
 on:
   push:
     branches:
-      - !master
+      - workflow
 
 jobs:
   plan:
