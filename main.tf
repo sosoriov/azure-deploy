@@ -1,3 +1,12 @@
+# terraform {
+#   backend "azurerm" {
+#     storage_account_name = "sebosotstate18864"
+#     container_name       = "tstate"
+#     key                  = "tfstate"
+
+#   }
+# }
+
 module "aks-cluster" {
   source = "./modules/aks"
 
