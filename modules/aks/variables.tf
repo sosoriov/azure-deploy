@@ -22,6 +22,22 @@ variable "enable_log_analytics_workspace" {
   default     = true
 }
 
+variable "enable_http_application_routing" {
+  type        = bool
+  description = "Enable HTTP Application Routing Addon (forces recreation)."
+  default     = false
+}
+variable "enable_kube_dashboard" {
+  type        = bool
+  description = "Enable Kubernetes Dashboard."
+  default     = false
+}
+variable "enable_azure_policy" {
+  type        = bool
+  description = "Enable Azure Policy Addon."
+  default     = false
+}
+
 variable "log_analytics_workspace_sku" {
   type        = string
   description = "Sku plan"

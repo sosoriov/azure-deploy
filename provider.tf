@@ -18,7 +18,7 @@ terraform {
       version = "2.0.2"
     }
     github = {
-      source = "integrations/github"
+      source  = "integrations/github"
       version = "4.9.2"
     }
   }
@@ -34,14 +34,14 @@ provider "kubernetes" {
   host                   = module.aks-cluster.aks_host
   username               = module.aks-cluster.aks_username
   password               = module.aks-cluster.aks_password
-  client_certificate     =module.aks-cluster.aks_client_certificate
-  client_key             =module.aks-cluster.aks_client_key
-  cluster_ca_certificate =module.aks-cluster.aks_cluster_ca_certificate
+  client_certificate     = module.aks-cluster.aks_client_certificate
+  client_key             = module.aks-cluster.aks_client_key
+  cluster_ca_certificate = module.aks-cluster.aks_cluster_ca_certificate
 }
 
 provider "kubectl" {
   host                   = module.aks-cluster.aks_host
-  cluster_ca_certificate =module.aks-cluster.aks_cluster_ca_certificate
+  cluster_ca_certificate = module.aks-cluster.aks_cluster_ca_certificate
   token                  = module.aks-cluster.aks_password
   load_config_file       = false
 }
