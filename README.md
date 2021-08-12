@@ -1,7 +1,6 @@
 # azure-deploy
 
 
-Testing Azure
 
 ## Flux V2
 
